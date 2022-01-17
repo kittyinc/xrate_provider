@@ -1,0 +1,99 @@
+version: "3.9"
+   
+services:
+
+  # rabbitmq:
+  #   container_name: xrate_provider_mq
+  #   hostname: rabbitmq
+  #   image: docker.io/library/rabbitmq:latest CHANGE TO SPECIFIC VERSION
+  
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+
+  #   restart: on-failure
+  #   networks:
+  #     - main
+
+  postgres:
+    container_name: xrate_provider_db
+    hostname: postgres
+    image: postgres:13
+    volumes:
+      - xrate_provider_db_data:/var/lib/postgresql/data
+    
+    ports:
+      - "5432:5432"
+
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+    restart: on-failure
+    networks:
+      - main
+
+  xrate_provider_service:
+    container_name: xrate_provider_service
+    build: .
+
+    # Needed for hot reload, Conflicts with .dockerignore, leaks .env CHANGE
+    volumes:
+      - .:/apiservice
+
+    command: python bootstrap.py
+
+    environment:
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      
+    command: >
+      bash -c "
+      wait-for postgres:5432;
+      python xrate_provider/manage.py runserver 0.0.0.0:8000"
+    # CHANGE FOR MIAU
+
+    ports:
+      - "8000:8000"
+    networks:
+      - main
+    depends_on:
+      - postgres
+
+  # celery_combo:
+  #   environment:
+  #     - DJANGO_SETTINGS_MODULE=cecrops_lms.config.ghetto
+  #   build: .
+  #  
+  #   command: >
+  #     bash -c "
+  #     wait-for cecrops_lms:8000;
+  #     celery --app cecrops_lms worker -B -E -l info"
+  #   container_name: celery_combo
+  #   depends_on:
+  #     - cecrops_lms
+  #     - postgres
+  #     - rabbitmq
+  #   deploy:
+  #     # replicas: 10
+  #     restart_policy:
+  #       condition: on-failure
+  #     resources:
+  #       limits:
+  #         cpus: '0.50'
+  #         # memory: 50M
+  #       reservations:
+  #         cpus: '0.25'
+  #         memory: 20M
+  #   hostname: celery_combo
+  #   networks:
+  #     - main
+  #   restart: on-failure
+
+networks:
+  main:
+
+volumes:
+  xrate_provider_db_data:
