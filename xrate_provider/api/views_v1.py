@@ -11,10 +11,9 @@ from api.throttling import APIThrottle
 from rates.models import Rate, PROVIDER_CHOICES
 
 class rates(APIView):
-    '''Returns latest rates for all providers and all provider variants'''
+    '''Returns latest rates for all providers and all provider variants''' # Needs test 
 
-
-    throttle_classes = [APIThrottle]
+    throttle_classes = [APIThrottle] # Needs test.
     def get(self, request):
 
         providers = []

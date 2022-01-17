@@ -28,12 +28,20 @@ except KeyError as e:
     print("CELERY_BROKER_URL env variable not set") # CHANGE TO logger.error
     raise e
 
+try:
+    FIXER_API_KEY = environ["FIXER_API_KEY"]
+except KeyError as e:
+    print("FIXER_API_KEY env variable not set") # CHANGE TO logger.error
+    raise e
+
+
+FIXER_SETTINGS = {
+    "url": "https://data.fixer.io/api/latest",
+    "api_key": FIXER_API_KEY
+}
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(
     default=DATABASE_URL, 
     conn_max_age=600
 )
-
-
-

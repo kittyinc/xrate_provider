@@ -2,27 +2,27 @@ version: "3.9"
    
 services:
 
-  rabbitmq:
-    container_name: xrate_provider_mq
-    hostname: rabbitmq
-    image: rabbitmq:3.9
+  # rabbitmq:
+  #   container_name: xrate_provider_mq
+  #   hostname: rabbitmq
+  #   image: rabbitmq:3.9
     
-    environment:
-      - RABBITMQ_DEFAULT_USER
-      - RABBITMQ_DEFAULT_PASS
-      - RABBITMQ_DEFAULT_VHOST
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER
+  #     - RABBITMQ_DEFAULT_PASS
+  #     - RABBITMQ_DEFAULT_VHOST
 
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - main
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   networks:
+  #     - main
 
-    restart: on-failure
+  #   restart: on-failure
 
-    # Silence output a bit
-    logging:
-      driver: none
+  #   # Silence output a bit
+  #   logging:
+  #     driver: none
 
 
   postgres:
@@ -64,6 +64,7 @@ services:
 
       - DJANGO_SETTINGS_MODULE
       - SECRET_KEY
+      - FIXER_API_KEY
       
 
     command: >
@@ -78,44 +79,44 @@ services:
     depends_on:
       - postgres
 
-  celery_beat:
-    container_name: celery_beat
-    hostname: celery_beat
+  # celery_beat:
+  #   container_name: celery_beat
+  #   hostname: celery_beat
 
-    environment:
-      - DATABASE_URL
-      - CELERY_BROKER_URL
+  #   environment:
+  #     - DATABASE_URL
+  #     - CELERY_BROKER_URL
 
-      - DJANGO_SETTINGS_MODULE
-      - SECRET_KEY
+  #     - DJANGO_SETTINGS_MODULE
+  #     - SECRET_KEY
 
-    build: .
+  #   build: .
    
-    command: >
-      bash -c "
-      wait-for xrate_provider_service:8000;
-      celery -A xrate_provider worker -B -E -l info"
+  #   command: >
+  #     bash -c "
+  #     wait-for xrate_provider_service:8000;
+  #     celery -A xrate_provider worker -B -E -l info"
 
-    depends_on:
-      # - xrate_provider_service
-      # - postgres
-      - rabbitmq
+  #   depends_on:
+  #     # - xrate_provider_service
+  #     # - postgres
+  #     - rabbitmq
 
-    deploy:
-      restart_policy:
-        condition: on-failure
-      resources:
-        limits:
-          cpus: '0.50'
-          # memory: 50M
-        reservations:
-          cpus: '0.25'
-          memory: 20M
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #     resources:
+  #       limits:
+  #         cpus: '0.50'
+  #         # memory: 50M
+  #       reservations:
+  #         cpus: '0.25'
+  #         memory: 20M
 
-    networks:
-      - main
+  #   networks:
+  #     - main
 
-    restart: on-failure
+  #   restart: on-failure
 
 networks:
   main:
