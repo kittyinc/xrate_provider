@@ -64,7 +64,9 @@ services:
 
       - DJANGO_SETTINGS_MODULE
       - SECRET_KEY
+
       - FIXER_API_KEY
+      - BANXICO_API_KEY
       
 
     command: >
@@ -89,6 +91,9 @@ services:
 
   #     - DJANGO_SETTINGS_MODULE
   #     - SECRET_KEY
+  
+  #     - FIXER_API_KEY
+  #     - BANXICO_API_KEY
 
   #   build: .
    

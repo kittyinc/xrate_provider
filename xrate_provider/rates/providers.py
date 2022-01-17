@@ -6,7 +6,8 @@ from rates.models import Rate, PROVIDER_CHOICES
 import requests
 
 
-def get_fixer_variant_1(varinat_number):
+def get_fixer_variant_1():
+    variant_number = 1
     url = settings.FIXER_SETTINGS["url"]
     api_key = settings.FIXER_SETTINGS["api_key"]
 
@@ -21,10 +22,9 @@ def get_fixer_variant_1(varinat_number):
     if r.status_code != 200:
         return {}, True # Return error for retry,
 
-    response = r.json() # might error out on breaking API change.
-    # response = {'success': True, 'timestamp': 1642403943, 'base': 'USD', 'date': '2022-01-17', 'rates': {'MXN': 20.320402}}
+    response = r.json() # might error out on breaking API change. Needs to plug in to a serializer, test the fucntion
 
-    last_updated =  make_aware(
+    last_updated_provider =  make_aware(
         datetime.fromtimestamp(response['timestamp'])
     )
 
@@ -32,7 +32,7 @@ def get_fixer_variant_1(varinat_number):
         "provider": PROVIDER_CHOICES[1][0], # might error out on PROVIDER_CHOICES change, needs test
         "last_updated": last_updated,
         "value": response["rates"]["MXN"],
-        "variant": varinat_number
+        "variant": variant_number
     }
 
     return output, False
@@ -45,8 +45,8 @@ providers = {
 
 def update_rates():
     for provider, variants in providers.items():
-        for idx, variant in enumerate(variants): # variants might not always have the same number, needs change/test
-            output, err = variant(idx + 1)
+        for variant in variants:
+            output, err = variant()
             if err:
                 # queue this variant again for retry in a separate task. Log and Notify via Sentry on repeat threshold
                 pass

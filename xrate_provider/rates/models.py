@@ -31,8 +31,14 @@ class Rate(models.Model):
         auto_now_add=True,
         null=False,
         blank=False,
-        verbose_name=_("last_updated"),
+        verbose_name=_("last updated"),
 
+    )
+
+    last_updated_provider = models.DateTimeField(
+        null=False,
+        blank=False,
+        verbose_name=_("last updated by provider"),
     )
 
     value = models.DecimalField(
