@@ -5,6 +5,7 @@ from rates.models import Rate, PROVIDER_CHOICES
 
 import requests
 import pytz
+from rates.dof import get_dof_variant_all
 
 BANXICO_TZ = pytz.timezone('America/Mexico_City')
 
@@ -22,7 +23,7 @@ def get_fixer_variant_1():
     r = requests.get(url, params=params)
 
     if r.status_code != 200:
-        return {}, True
+        return [{}], True
 
     response = r.json()
 
@@ -39,7 +40,7 @@ def get_fixer_variant_1():
         "variant": variant_number
     }
 
-    return output, False
+    return [output], False
 
 
 
@@ -56,7 +57,7 @@ def get_banxico_variant_1():
     r = requests.get(url, headers=headers)
 
     if r.status_code != 200:
-        return {}, True
+        return [{}], True
 
     response = r.json()
     data = response["bmx"]["series"][0]["datos"][0] # should reasonably respond only one entry according to the API
@@ -74,24 +75,26 @@ def get_banxico_variant_1():
         "variant": variant_number
     }
 
-    return output, False
+    return [output], False
 
 
 
 providers = {
     "Fixer": [get_fixer_variant_1,],
-    "Banxico": [get_banxico_variant_1,]
-    # "Diario Oficial": []
+    "Banxico": [get_banxico_variant_1,],
+    "Diario Oficial": [get_dof_variant_all,]
 }
 
 def update_rates():
     for provider, variants in providers.items():
         for variant in variants:
-            output, err = variant()
+            output, err = variant() # logger.info
+
             if err:
                 # queue this variant again for retry in a separate task. Log and Notify via Sentry on repeat threshold
                 pass
 
             else:
-                rate = Rate(**output)
-                rate.save() # Needs to try to save the variant in case of error
+                for o in output: # should bulk create
+                    rate = Rate(**o)
+                    rate.save() # Needs to try to save the variant in case of error

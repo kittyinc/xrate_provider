@@ -55,6 +55,13 @@ class Rate(models.Model):
         blank=False,
     )
 
+    variant_name = models.CharField(
+        max_length=25,
+        null=False,
+        blank=False,
+        default="default", 
+    )
+
     def __str__(self):
         return "{} - {}: {}".format(self.provider, self.variant, self.value)
 

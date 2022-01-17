@@ -51,6 +51,10 @@ BANXICO_SETTINGS = {
     "api_key": BANXICO_API_KEY
 }
 
+DOF_SETTINGS = {
+    "url": "https://www.banxico.org.mx/tipcamb/tipCamMIAction.do"
+}
+
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(

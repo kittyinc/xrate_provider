@@ -22,7 +22,8 @@ Each user is rate limited to 2 requests per minute for demo purposes.
 - ~Serializers~
 - ~Authentication~ missing single token only.
 - ~Views~
-- Scrapping
+- Indexing
+- ~Scrapping~
 - Tests
 - I18N/L10N
 - Admin customization

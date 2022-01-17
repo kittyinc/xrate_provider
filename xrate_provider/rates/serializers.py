@@ -9,4 +9,5 @@ class RateSerializer(serializers.ModelSerializer):
             "last_updated_provider",
             "value",
             "variant",
+            "variant_name",
         ]
