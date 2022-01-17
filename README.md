@@ -12,7 +12,7 @@ Each user has only one api token, must send it as ```Authorization: Token <TOKEN
 
 #### Rate Limiting:
 
-Each user is rate limited to 2 requests per minute.
+Each user is rate limited to 2 requests per minute for demo purposes.
 
 	
 
@@ -29,9 +29,9 @@ Each user is rate limited to 2 requests per minute.
 
 ## Notes
 
-- Missing Parametrization for throttling.
-- Missing Currency Codes?
-- Missing Correct Docker configuration (Delete App volume, use dockerignore)
+- Missing parametrization for throttling.
+- Missing currency Codes?
+- Missing correct Docker configuration (Delete App volume, use dockerignore)
 - Missing development instructions
 - Missing deployment instructions
 - Missing some documentation

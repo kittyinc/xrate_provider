@@ -6,6 +6,7 @@ class RateSerializer(serializers.ModelSerializer):
         model = Rate
         fields = [
             "last_updated",
+            "last_updated_provider",
             "value",
             "variant",
         ]

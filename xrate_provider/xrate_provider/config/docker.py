@@ -34,11 +34,23 @@ except KeyError as e:
     print("FIXER_API_KEY env variable not set") # CHANGE TO logger.error
     raise e
 
+try:
+    BANXICO_API_KEY = environ["BANXICO_API_KEY"]
+except KeyError as e:
+    print("BANXICO_API_KEY env variable not set") # CHANGE TO logger.error
+    raise e
+
 
 FIXER_SETTINGS = {
     "url": "https://data.fixer.io/api/latest",
     "api_key": FIXER_API_KEY
 }
+
+BANXICO_SETTINGS = {
+    "url": "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno",
+    "api_key": BANXICO_API_KEY
+}
+
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(
