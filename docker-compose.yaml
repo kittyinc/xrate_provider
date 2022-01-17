@@ -2,18 +2,28 @@ version: "3.9"
    
 services:
 
-  # rabbitmq:
-  #   container_name: xrate_provider_mq
-  #   hostname: rabbitmq
-  #   image: docker.io/library/rabbitmq:latest CHANGE TO SPECIFIC VERSION
-  
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
+  rabbitmq:
+    container_name: xrate_provider_mq
+    hostname: rabbitmq
+    image: rabbitmq:3.9
+    
+    environment:
+      - RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS
+      - RABBITMQ_DEFAULT_VHOST
 
-  #   restart: on-failure
-  #   networks:
-  #     - main
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - main
+
+    restart: on-failure
+
+    # Silence output a bit
+    logging:
+      driver: none
+
 
   postgres:
     container_name: xrate_provider_db
@@ -26,34 +36,40 @@ services:
       - "5432:5432"
 
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      
     restart: on-failure
     networks:
       - main
+
+    # Silence output a bit
+    logging:
+      driver: none
 
   xrate_provider_service:
     container_name: xrate_provider_service
     build: .
 
-    # Needed for hot reload, Conflicts with .dockerignore, leaks .env CHANGE
+    #COMMENT OUT Needed for hot reload, Conflicts with .dockerignore, leaks .env
     volumes:
       - .:/apiservice
 
     command: python bootstrap.py
 
     environment:
-      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
-      - DATABASE_URL=${DATABASE_URL}
-      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL
+      - CELERY_BROKER_URL
+
+      - DJANGO_SETTINGS_MODULE
+      - SECRET_KEY
       
+
     command: >
       bash -c "
       wait-for postgres:5432;
       python xrate_provider/manage.py runserver 0.0.0.0:8000"
-    # CHANGE FOR MIAU
 
     ports:
       - "8000:8000"
@@ -62,35 +78,44 @@ services:
     depends_on:
       - postgres
 
-  # celery_combo:
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=cecrops_lms.config.ghetto
-  #   build: .
-  #  
-  #   command: >
-  #     bash -c "
-  #     wait-for cecrops_lms:8000;
-  #     celery --app cecrops_lms worker -B -E -l info"
-  #   container_name: celery_combo
-  #   depends_on:
-  #     - cecrops_lms
-  #     - postgres
-  #     - rabbitmq
-  #   deploy:
-  #     # replicas: 10
-  #     restart_policy:
-  #       condition: on-failure
-  #     resources:
-  #       limits:
-  #         cpus: '0.50'
-  #         # memory: 50M
-  #       reservations:
-  #         cpus: '0.25'
-  #         memory: 20M
-  #   hostname: celery_combo
-  #   networks:
-  #     - main
-  #   restart: on-failure
+  celery_beat:
+    container_name: celery_beat
+    hostname: celery_beat
+
+    environment:
+      - DATABASE_URL
+      - CELERY_BROKER_URL
+
+      - DJANGO_SETTINGS_MODULE
+      - SECRET_KEY
+
+    build: .
+   
+    command: >
+      bash -c "
+      wait-for xrate_provider_service:8000;
+      celery -A xrate_provider worker -B -E -l info"
+
+    depends_on:
+      # - xrate_provider_service
+      # - postgres
+      - rabbitmq
+
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          # memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+
+    networks:
+      - main
+
+    restart: on-failure
 
 networks:
   main:
