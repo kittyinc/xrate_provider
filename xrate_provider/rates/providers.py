@@ -91,10 +91,14 @@ def update_rates():
             output, err = variant() # logger.info
 
             if err:
-                # queue this variant again for retry in a separate task. Log and Notify via Sentry on repeat threshold
+                # queue single variant failure with update_rate_single() task
                 pass
 
             else:
                 for o in output: # should bulk create
                     rate = Rate(**o)
                     rate.save() # Needs to try to save the variant in case of error
+
+def update_rate_single(variant_name):
+    '''Should be a bound task that retries a single failing variant according to a retry threshold'''
+    pass

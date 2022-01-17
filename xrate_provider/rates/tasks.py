@@ -1,7 +1,8 @@
 from xrate_provider.celery import app 
+from rates.providers import update_rates
 
-@app.task(name="debug_task")
-def debug_task(self):
-    print(f'Request: {self.request!r}')
+@app.task(name="update_rates_task")
+def update_rates_task(self):
+    update_rates()
 
-app.tasks.register(debug_task)
+# app.tasks.register(update_rates_task)

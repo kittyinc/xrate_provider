@@ -67,10 +67,3 @@ class Rate(models.Model):
 
     class Meta:
         pass
-
-
-
-# for every enumerator, get number of variants, assemble list or something
-# for every variant get latest value
-# assemble into serializer
-# Output as view
