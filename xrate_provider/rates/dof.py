@@ -76,4 +76,5 @@ def get_dof_variant_all():
                     "value": rate,
                 }
             )
+    print(output)
     return output, False

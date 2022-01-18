@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from django.utils.translation import gettext as _
 from uuid import uuid4
 
@@ -28,7 +30,7 @@ class Rate(models.Model):
     )
 
     last_updated = models.DateTimeField(
-        auto_now_add=True,
+        default=timezone.now,
         null=False,
         blank=False,
         verbose_name=_("last updated"),

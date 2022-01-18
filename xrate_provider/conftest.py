@@ -15,12 +15,6 @@ def rate_dof_variant_fix(rate):
     rate.save()
     return rate
 
-@pytest.fixture
-def rate_dof_variant_fix(rate):
-    rate.variant = 1
-    rate.variant_name = "FIX"
-    rate.save()
-    return rate
 
 @pytest.fixture
 def api_client(token):

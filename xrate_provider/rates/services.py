@@ -23,12 +23,13 @@ def get_fixer_variant_1():
     r = requests.get(url, params=params)
 
     if r.status_code != 200:
-        return [{}], True
+        return [], True
 
     response = r.json()
     last_updated_provider =  make_aware(
         datetime.fromtimestamp(response['timestamp']) # Date in UTC according to API, same as server and spec.
     )
+
 
     # might error out on breaking API change. Needs to plug in to a serializer, test the fucntion
     # might error out on PROVIDER_CHOICES change, needs test
@@ -44,7 +45,7 @@ def get_fixer_variant_1():
 
 
 def get_banxico_variant_1():
-    '''Reimplement with XML according to spec'''
+    '''TODO: Reimplement with XML according to spec'''
     variant_number = 1
     url = settings.BANXICO_SETTINGS["url"]
     api_key = settings.BANXICO_SETTINGS["api_key"]
@@ -56,9 +57,10 @@ def get_banxico_variant_1():
     r = requests.get(url, headers=headers)
 
     if r.status_code != 200:
-        return [{}], True
+        return [], True
 
     response = r.json()
+
     data = response["bmx"]["series"][0]["datos"][0] # should reasonably respond only one entry according to the API
     
     last_updated_provider = make_aware( 

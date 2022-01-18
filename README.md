@@ -14,7 +14,6 @@ Each user has only one api token, must send it as ```Authorization: Token <TOKEN
 
 Each user is rate limited to 2 requests per minute for demo purposes.
 
-	
 
 ## TODO
 
@@ -22,13 +21,13 @@ Each user is rate limited to 2 requests per minute for demo purposes.
 - ~Serializers~
 - ~Authentication~ missing single token only.
 - ~Views~
-- Indexing
 - ~Scrapping~
-- Tests
+- ~Tests~
+- Indexing
 - I18N/L10N
 - Admin customization
 
-## Notes
+## Missing
 
 - Missing parametrization for throttling.
 - Missing currency Codes?
