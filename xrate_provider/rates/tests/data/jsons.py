@@ -1,0 +1,1 @@
+FIXER_VALID_RESPONSE = {'success': True, 'timestamp': 1642483143, 'base': 'USD', 'date': '2022-01-18', 'rates': {'MXN': 20.326596}}

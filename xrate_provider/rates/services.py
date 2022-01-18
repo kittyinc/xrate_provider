@@ -26,7 +26,6 @@ def get_fixer_variant_1():
         return [{}], True
 
     response = r.json()
-
     last_updated_provider =  make_aware(
         datetime.fromtimestamp(response['timestamp']) # Date in UTC according to API, same as server and spec.
     )
@@ -84,6 +83,10 @@ providers = {
     "Banxico": [get_banxico_variant_1,],
     "Diario Oficial": [get_dof_variant_all,]
 }
+
+def get_all_providers():
+    pass
+
 
 def update_rates():
     for provider, variants in providers.items():

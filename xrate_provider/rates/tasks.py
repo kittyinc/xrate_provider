@@ -1,5 +1,5 @@
 from xrate_provider.celery import app 
-from rates.providers import update_rates
+from rates.services import update_rates
 
 @app.task(name="update_rates_task")
 def update_rates_task(self):

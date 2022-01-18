@@ -55,9 +55,7 @@ services:
     #COMMENT OUT Needed for hot reload, Conflicts with .dockerignore, leaks .env
     volumes:
       - .:/apiservice
-
-    command: python bootstrap.py
-
+    
     environment:
       - DATABASE_URL
       - CELERY_BROKER_URL

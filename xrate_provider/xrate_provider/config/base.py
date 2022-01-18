@@ -23,14 +23,13 @@ INSTALLED_APPS = [
     # VENDOR
 
     "rest_framework",
+    "rest_framework.authtoken",
     "django_celery_beat",
     "django_celery_results",
-
 
     # SERVICE
 
     'api.apps.ApiConfig',
-    'authentication.apps.AuthenticationConfig',
     'rates.apps.RatesConfig',
 ]
 
@@ -110,7 +109,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'authentication.api_token_authentication.APITokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',

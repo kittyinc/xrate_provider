@@ -53,6 +53,8 @@ class Rate(models.Model):
     variant = models.PositiveIntegerField(
         null=False,
         blank=False,
+        verbose_name=_("variant"),
+
     )
 
     variant_name = models.CharField(
@@ -60,10 +62,9 @@ class Rate(models.Model):
         null=False,
         blank=False,
         default="default", 
+        verbose_name=_("variant name"),
+
     )
 
     def __str__(self):
         return "{} - {}: {}".format(self.provider, self.variant, self.value)
-
-    class Meta:
-        pass

@@ -24,7 +24,7 @@ def check_float(value):
 # This function can be massively imporved
 def get_dof_variant_all():
     url = settings.DOF_SETTINGS["url"]
-    r = requests.get(url)
+    r = requests.get(url) # Assert call once with MOCK
 
     if r.status_code != 200:
         return [], True
@@ -38,7 +38,7 @@ def get_dof_variant_all():
     values = []
 
     for item in raw_values:
-        values.append([c.text.strip() for c in item.find_all("td")])
+        values.append([c.text.strip() for c in item.find_all("td")]) # [12/01/2022, 20.777, N/E]
 
     for value in values:
         value[0] = make_aware(
