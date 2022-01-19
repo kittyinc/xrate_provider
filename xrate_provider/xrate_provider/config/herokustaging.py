@@ -8,6 +8,7 @@ import dj_database_url
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    "xrate-provider.herokuapp.com",
     "https://xrate-provider.herokuapp.com/",
 ]
 
