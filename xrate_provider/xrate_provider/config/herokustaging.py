@@ -1,10 +1,15 @@
 from .base import *  # noqa: F403 F401
 from os import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 import dj_database_url
 
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+DEBUG = False
+
+ALLOWED_HOSTS = [
+    "https://xrate-provider.herokuapp.com/",
+]
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_RESULT_BACKEND = 'django-db'
@@ -55,6 +60,20 @@ DOF_SETTINGS = {
     "url": "https://www.banxico.org.mx/tipcamb/tipCamMIAction.do"
 }
 
+
+sentry_sdk.init(
+    dsn="https://68dca268fd68470dabaf0f1045f08643@o305761.ingest.sentry.io/6156227",
+    integrations=[DjangoIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(
