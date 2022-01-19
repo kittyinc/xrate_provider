@@ -40,9 +40,24 @@ BANXICO_API_KEY
 2. Connect to ```xrate_provider_service``` container and change directory to to ```xrate_provider```.
 3. Execute ```python manage.py migrate```.
 4. Execute ```python manage.py createsuperuser``` to create a Django admin superuser.
+5. You need to add a Celery Periodic Task in the admin with task name ```update_rates_task```.
 
 Service is available at [http://localhost:8000/service/v1/rates/](http://localhost:8000/service/v1/rates/)
+
 Admin panel is available at [http://localhost:8000/admin/](http://localhost:8000/admin)
+
+Service is deployed at: [https://xrate-provider.herokuapp.com/](https://xrate-provider.herokuapp.com/)
+
+
+## Endpoints:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2214299-796bef2b-240f-4aec-9ec9-13c221b98656?action=collection%2Ffork&collection-url=entityId%3D2214299-796bef2b-240f-4aec-9ec9-13c221b98656%26entityType%3Dcollection%26workspaceId%3D105d3a0f-2400-4d3c-925f-14c5f74d4e93)
+
+
+[GET] /service/v1/rates/
+
+Headers:
+- ```Authorization: Token <TOKEN>```
 
 
 ## Missing
