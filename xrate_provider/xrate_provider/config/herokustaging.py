@@ -62,7 +62,7 @@ DOF_SETTINGS = {
 
 
 sentry_sdk.init(
-    dsn="https://68dca268fd68470dabaf0f1045f08643@o305761.ingest.sentry.io/6156227",
+    dsn="https://f3e1ac8bf7184fad846d2c78a6a762b6@o1120393.ingest.sentry.io/6156239",
     integrations=[DjangoIntegration()],
 
     # Set traces_sample_rate to 1.0 to capture 100%
