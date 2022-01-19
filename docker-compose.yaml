@@ -70,7 +70,7 @@ services:
     command: >
       bash -c "
       wait-for postgres:5432;
-      python xrate_provider/manage.py runserver 0.0.0.0:8000"
+      python xrate_provider/manage.py runserver --nostatic 0.0.0.0:8000"
 
     ports:
       - "8000:8000"
@@ -98,7 +98,7 @@ services:
     command: >
       bash -c "
       wait-for postgres:5432;
-      celery -A xrate_provider worker -B -E -l info"
+      celery --app xrate_provider worker --beat --loglevel info"
 
     depends_on:
       - postgres

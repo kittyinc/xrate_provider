@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "django_celery_results",
 
+    # Use Whitenoise in development
+    'whitenoise.runserver_nostatic',
+
     # SERVICE
 
     'api.apps.ApiConfig',
@@ -35,6 +38,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -100,6 +104,10 @@ USE_L10N = True
 
 STATIC_URL = '/static/'
 
+# Whitenoise
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
