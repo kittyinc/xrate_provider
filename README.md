@@ -1,13 +1,13 @@
-# Exchange Rate Provider API
+# Exchange Rate API
 
 Provides USD to MXN exchange rate from various sources and agregates them in a single request.
 
 
-## Features:
+#### Authentication:
 
-#### Per User Token Authentication:
+Each user has only one active API token. The token must be sent as a header:
 
-Each user has only one api token, must send it as ```Authorization: Token <TOKEN>```.
+```Authorization: Token <TOKEN>```
 
 
 #### Rate Limiting:
@@ -17,7 +17,7 @@ Each user is rate limited to 2 requests per minute for demo purposes.
 
 ## Development Instructions:
 
-You need to provide a valid .env file with the following parameters:
+You need to provide a valid ```.env``` file with the following environmental variables set:
 
 ```.env
 POSTGRES_DB
@@ -37,17 +37,28 @@ BANXICO_API_KEY
 ```
 
 1. Run ```docker-compose --up``` in your terminal.
-2. Connect to ```xrate_provider_service``` container and change directory to to ```xrate_provider```.
+2. Connect to ```xrate_provider_service``` container and change directory to ```xrate_provider```.
 3. Execute ```python manage.py migrate```.
 4. Execute ```python manage.py createsuperuser``` to create a Django admin superuser.
-5. You need to add a Celery Periodic Task in the admin with task name ```update_rates_task```.
+5. You need to add a Celery periodic task in the admin with task name ```update_rates_task```.
 
-Service is available at [http://localhost:8000/service/v1/rates/](http://localhost:8000/service/v1/rates/)
+
+Service is available at [http://localhost:8000/service/v1/rates/](http://localhost:8000/service/)
 
 Admin panel is available at [http://localhost:8000/admin/](http://localhost:8000/admin)
 
 Service is deployed at: [https://xrate-provider.herokuapp.com/](https://xrate-provider.herokuapp.com/)
 
+
+## Testing:
+
+Unit tests are executed using pytest.
+
+Tests are located under each app's tests directory.
+
+1. Connect to ```xrate_provider_service``` container and change directory to to ```xrate_provider```.
+
+2. Execute ```pytest```, use ```-vv``` flag for verbose output, use ```--flakes``` for linting.
 
 ## Endpoints:
 
@@ -60,24 +71,19 @@ Headers:
 - ```Authorization: Token <TOKEN>```
 
 
-## Missing
+## Notes
 
-- Missing parametrization for throttling.
-- Missing currency Codes ?
-- Missing correct Docker configuration (Delete App volume to use .dockerignore).
-- Missing deployment instructions.
+- Error tracking is setup with my personal Sentry account at the moment.
+- The project is currently missing throttling parametrization at runtime.
+- I did not implement currency codes, due to the explicit USD to MXN requirement. 
+- One of the specified providers, Fixer does NOT support currency conversion without a paid plan. I'm using the most basic paid plan.
+- This project is deployed to Heroku as the challenge suggested, however, running more than 1 dyno or binding a custom domain name/SSL cert costs.
+- To run my chosen task runner (Celery), I need 2 additional dynos, 1 for a worker and 1 for a scheduler, what this means is that rate updating does not work on the deployed instance at the moment.
+
 
 ## TODO
 
-- ~Models~
-- ~Serializers~
-- ~Authentication~
-- ~Views~
-- ~Scrapping~
-- ~Tests~
-- ~Linting~
-
-- Indexing
+- DB Indexing
 - I18N/L10N
 - Admin customization
 
