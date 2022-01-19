@@ -10,6 +10,7 @@ PROVIDER_CHOICES = (
     ("BXO", "Banxico"),
 )
 
+
 class Rate(models.Model):
 
     rate_id = models.UUIDField(
@@ -44,7 +45,8 @@ class Rate(models.Model):
     )
 
     value = models.DecimalField(
-        max_digits=20, # what happens if the value fluctuates wildly overnight i.e 1 USD = 10,500 MXN.
+        # what happens if the value fluctuates wildly overnight
+        max_digits=20,
         decimal_places=6,
         null=False,
         blank=False,
@@ -63,7 +65,7 @@ class Rate(models.Model):
         max_length=25,
         null=False,
         blank=False,
-        default="default", 
+        default="default",
         verbose_name=_("variant name"),
 
     )

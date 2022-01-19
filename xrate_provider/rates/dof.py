@@ -23,8 +23,9 @@ def check_float(value):
 
 # This function can be massively imporved
 def get_dof_variant_all():
+    ''' Returns all variants for DOF'''
     url = settings.DOF_SETTINGS["url"]
-    r = requests.get(url) # Assert call once with MOCK
+    r = requests.get(url)  # Assert call once with MOCK
 
     if r.status_code != 200:
         return [], True
@@ -38,7 +39,7 @@ def get_dof_variant_all():
     values = []
 
     for item in raw_values:
-        values.append([c.text.strip() for c in item.find_all("td")]) # [12/01/2022, 20.777, N/E]
+        values.append([c.text.strip() for c in item.find_all("td")])
 
     for value in values:
         value[0] = make_aware(
@@ -68,7 +69,7 @@ def get_dof_variant_all():
 
         if rate is not None:
             output.append(
-                {   
+                {
                     "provider": PROVIDER_CHOICES[0][0],
                     "last_updated_provider": pub_date,
                     "variant": variant[1],
@@ -76,5 +77,4 @@ def get_dof_variant_all():
                     "value": rate,
                 }
             )
-    print(output)
     return output, False

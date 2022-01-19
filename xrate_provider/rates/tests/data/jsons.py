@@ -1,2 +1,2 @@
-FIXER_VALID_RESPONSE = {'success': True, 'timestamp': 1642483143, 'base': 'USD', 'date': '2022-01-18', 'rates': {'MXN': 20.326596}}
-BANXICO_VALID_RESPONSE = {'bmx': {'series': [{'idSerie': 'SF43718', 'titulo': 'Tipo de cambio                                          Pesos por dólar E.U.A. Tipo de cambio para solventar obligaciones denominadas en moneda extranjera Fecha de determinación (FIX)', 'datos': [{'fecha': '17/01/2022', 'dato': '20.3002'}]}]}}
+FIXER_VALID_RESPONSE = {'success': True, 'timestamp': 1642483143, 'base': 'USD', 'date': '2022-01-18', 'rates': {'MXN': 20.326596}}  # noqa: E501
+BANXICO_VALID_RESPONSE = {'bmx': {'series': [{'idSerie': 'SF43718', 'titulo': 'Tipo de cambio                                          Pesos por dólar E.U.A. Tipo de cambio para solventar obligaciones denominadas en moneda extranjera Fecha de determinación (FIX)', 'datos': [{'fecha': '17/01/2022', 'dato': '20.3002'}]}]}}  # noqa: E501
